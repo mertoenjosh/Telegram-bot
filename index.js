@@ -1,15 +1,18 @@
 // pakages
 const { Telegraf } = require("telegraf");
 const dotenv = require("dotenv");
-const db = require("./db");
-const regex = require("url-regex");
 const urlRegex = require("url-regex");
+const fetch = require("node-fetch");
+const db = require("./db");
 
 // env config
 dotenv.config({ path: ".env" });
 
 // initialize bot
 const bot = new Telegraf(process.env.BOT_TOKEN);
+
+// regexs
+const titleRegex = /<title>(.+)<\/title>/gim;
 
 // masic messages initializations
 const welcomeMessage = `Welcome to back up bot..!  
@@ -29,10 +32,11 @@ bot.hears(/new episode (.+)/, async (ctx) => {
 
   // remove all old episodes
   await db.remove({ userId }, { multi: true });
+
   // create a new episode
   await db.insert({ userId, episodeName, links: [] });
 
-  ctx.reply(`new episode created with name: ${episodeName}`);
+  ctx.reply(`New episode created with name: ${episodeName}`);
 });
 
 bot.hears(urlRegex(), async (ctx) => {
@@ -40,11 +44,18 @@ bot.hears(urlRegex(), async (ctx) => {
   const urls = ctx.message.text.match(urlRegex());
   const firstUrl = urls[0];
 
+  // get url title
+  const body = await fetch(firstUrl).then((r) => r.text());
+  const titleTag = body.match(titleRegex);
+  console.log(titleTag);
+  const title = titleTag.pop().replace("<title>", "").replace("</title>", "");
+
+  console.log(title);
+
   // get userId
   const userId = ctx.from.id;
-  const currentCollection = await db.find({ userId: ctx.from.id });
 
-  console.log(currentCollection);
+  await db.update({ userId }, { $push: { links: firstUrl } });
 
   ctx.reply(`Link saved`);
 });
