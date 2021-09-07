@@ -1,0 +1,19 @@
+{
+  "name": "bxjs-bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mertoenjosh/Telegram-bot.git"
+  },
+  "author": "martin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mertoenjosh/Telegram-bot/issues"
+  },
+  "homepage": "https://github.com/mertoenjosh/Telegram-bot#readme"
+}
