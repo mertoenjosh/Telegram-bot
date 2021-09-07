@@ -31,5 +31,11 @@ bot.hears(/new episode (.+)/, async (ctx) => {
   ctx.reply(`new episode created with name: ${episodeName}`);
 });
 
+bot.hears(/http/i, (ctx) => {
+  console.log(ctx.update.message.text);
+
+  ctx.reply(`Link saved`);
+});
+
 // start bot
 bot.launch();
