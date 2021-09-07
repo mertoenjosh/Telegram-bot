@@ -32,7 +32,7 @@ bot.hears(/new episode (.+)/, async (ctx) => {
 });
 
 bot.hears(/http/i, (ctx) => {
-  console.log(ctx.update.message.text);
+  console.log(ctx.message);
 
   ctx.reply(`Link saved`);
 });
