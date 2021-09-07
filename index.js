@@ -2,6 +2,10 @@
 const { Telegraf } = require("telegraf");
 const dotenv = require("dotenv");
 const db = require("./db");
+const regex = require("url-regex");
+const urlRegex = require("url-regex");
+
+// env config
 dotenv.config({ path: ".env" });
 
 // initialize bot
@@ -31,8 +35,16 @@ bot.hears(/new episode (.+)/, async (ctx) => {
   ctx.reply(`new episode created with name: ${episodeName}`);
 });
 
-bot.hears(/http/i, (ctx) => {
-  console.log(ctx.message);
+bot.hears(urlRegex(), async (ctx) => {
+  // get urls from texts
+  const urls = ctx.message.text.match(urlRegex());
+  const firstUrl = urls[0];
+
+  // get userId
+  const userId = ctx.from.id;
+  const currentCollection = await db.find({ userId: ctx.from.id });
+
+  console.log(currentCollection);
 
   ctx.reply(`Link saved`);
 });
