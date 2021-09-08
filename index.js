@@ -1,5 +1,5 @@
 // pakages
-const { Telegraf, Markup } = require('telegraf');
+const { Telegraf, Markup, Extra } = require('telegraf');
 const dotenv = require('dotenv');
 const urlRegex = require('url-regex');
 const fetch = require('node-fetch');
@@ -129,34 +129,55 @@ categories.forEach(category => {
 });
 
 bot.hears(/generate markdown/i, async ctx => {
-  //   const userId = ctx.from.userId;
+  const userId = ctx.from.userId;
 
-  //   let markdown;
-  //   await db.find({}, (err, doc) => {
-  //     const links = doc[0].links;
+  let markdown;
+  await db.find({}, (err, doc) => {
+    const links = doc[0].links;
 
-  //     // group links by category
+    // group links by category
 
-  //     const groupedLinks = _.groupBy(links, it => it.category);
+    const groupedLinks = _.groupBy(links, it => it.category);
 
-  //     markdown = categories
-  //       .map(category => {
-  //         const header = `\n## ${category}\n`;
-  //         const links = groupedLinks[category]
-  //           ? groupedLinks[category]
-  //               .map(link => ` - [${sanitizeTitle(link.title)}](${link.url})\n`)
-  //               .reduce((acc, val) => acc + val, '')
-  //           : `- No links yet \n`;
-  //         return `${header}${links}`;
-  //       })
-  //       .reduce((acc, val) => acc + val, '');
+    markdown = categories
+      .map(category => {
+        const header = `\n## ${category}\n`;
+        const links = groupedLinks[category]
+          ? groupedLinks[category]
+              .map(link => ` - [${sanitizeTitle(link.title)}](${link.url})\n`)
+              .reduce((acc, val) => acc + val, '')
+          : `- No links yet \n`;
+        return `${header}${links}`;
+      })
+      .reduce((acc, val) => acc + val, '');
 
-  //     console.log(markdown);
-  //     ctx.reply(markdown);
-  //   });
+    ctx.reply(markdown);
+  });
+});
 
-  console.log(await generateMarkdown(categories));
-  ctx.reply(await generateMarkdown(categories));
+bot.hears(/generate preview/i, async ctx => {
+  let markdown;
+  await db.find({}, (err, doc) => {
+    const links = doc[0].links;
+
+    // group links by category
+
+    const groupedLinks = _.groupBy(links, it => it.category);
+
+    markdown = categories
+      .map(category => {
+        const header = `\n## ${category}\n`;
+        const links = groupedLinks[category]
+          ? groupedLinks[category]
+              .map(link => ` - [${sanitizeTitle(link.title)}](${link.url})\n`)
+              .reduce((acc, val) => acc + val, '')
+          : `- No links yet \n`;
+        return `${header}${links}`;
+      })
+      .reduce((acc, val) => acc + val, '');
+
+    ctx.replyWithMarkdown(markdown);
+  });
 });
 
 // start bot
