@@ -19,6 +19,7 @@
   "dependencies": {
     "dotenv": "^10.0.0",
     "ent": "^2.2.0",
+    "lodash": "^4.17.21",
     "nedb": "^1.8.0",
     "node-fetch": "^2.6.2",
     "telegraf": "^4.4.1",

@@ -5,6 +5,7 @@ const urlRegex = require('url-regex');
 const fetch = require('node-fetch');
 const ent = require('ent');
 const db = require('./db');
+const _ = require('lodash');
 
 // env config
 dotenv.config({ path: '.env' });
@@ -25,6 +26,35 @@ const categories = [
   'Libs and Demos',
   'Silly stuff',
 ];
+
+// helper functions
+const sanitizeTitle = title => title.replace(/[\n\r\t]+/gm, ' ');
+
+const generateMarkdown = async categories => {
+  let markdown;
+
+  await db.find({}, (err, doc) => {
+    const links = doc[0].links;
+
+    //group links by categories
+    const groupedLinks = _.groupBy(links, it => it.category);
+
+    markdown = categories
+      .map(category => {
+        const header = `\n## ${category}\n`;
+        const links = groupedLinks[category]
+          ? groupedLinks[category]
+              .map(link => `- [${sanitizeTitle(link.title)}](${link.url})\n`)
+              .reduce((acc, val) => acc + val, '')
+          : `- No links yet \n`;
+
+        return `${header}${links}`;
+      })
+      .reduce((acc, val) => acc + val, '');
+  });
+
+  return markdown;
+};
 
 // masic messages initializations
 const welcomeMessage = `Welcome to back up bot..!  
@@ -99,18 +129,35 @@ categories.forEach(category => {
 });
 
 bot.hears(/generate markdown/i, async ctx => {
-  const userId = ctx.from.userId;
+  //   const userId = ctx.from.userId;
 
-  //   const collection = await db.find({});
-  let markdown;
-  await db.find({}, (err, doc) => {
-    markdown = JSON.stringify(doc);
+  //   let markdown;
+  //   await db.find({}, (err, doc) => {
+  //     const links = doc[0].links;
 
-    console.log(markdown);
-    ctx.reply(markdown);
-  });
+  //     // group links by category
 
-  //   console.log(await db.find({}));
+  //     const groupedLinks = _.groupBy(links, it => it.category);
+
+  //     markdown = categories
+  //       .map(category => {
+  //         const header = `\n## ${category}\n`;
+  //         const links = groupedLinks[category]
+  //           ? groupedLinks[category]
+  //               .map(link => ` - [${sanitizeTitle(link.title)}](${link.url})\n`)
+  //               .reduce((acc, val) => acc + val, '')
+  //           : `- No links yet \n`;
+  //         return `${header}${links}`;
+  //       })
+  //       .reduce((acc, val) => acc + val, '');
+
+  //     console.log(markdown);
+  //     ctx.reply(markdown);
+  //   });
+
+  console.log(await generateMarkdown(categories));
+  ctx.reply(await generateMarkdown(categories));
 });
+
 // start bot
 bot.launch();
