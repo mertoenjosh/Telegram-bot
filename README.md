@@ -2,14 +2,20 @@
 Links saving telegram bot
 </h1>
 
+The bot will return a raw markdown text
+
+the bot can return a markdown preview of the Markdown generated from the links sent
+
+The bot wll categorize different links in different categories.
+
 ### Feauture Improvements
 
-- Train to auto select category
+1. Change DB to a secure one
 
-- Edit exixting episodes and not deleting the previous after creating a new one.
+2. Auto send the links to cloud.
 
-- Change DB to a secure one
+3. Add a media backup functionality.
 
-- Auto send the links to cloud.
+4. Edit exixting episodes and not deleting the previous after creating a new one.
 
-- Add a media backup functionality.
+5. Train to auto select category
