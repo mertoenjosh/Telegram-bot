@@ -5,3 +5,5 @@ Links saving telegram bot
 ### Feauture Improvements
 
 - Train to auto select category
+
+- Edit exixting episodes and not deleting the previous after creating a new one.

@@ -38,17 +38,17 @@ bot.help(ctx => ctx.reply(helpTxt));
 // listen commands
 bot.on('sticker', ctx => ctx.reply('👍'));
 
-bot.hears(/new episode (.+)/, async ctx => {
+bot.hears(/new collection (.+)/i, async ctx => {
   const userId = ctx.from.id;
-  const episodeName = ctx.match[1];
+  const collectionName = ctx.match[1];
 
   // remove all old episodes
   await db.remove({ userId }, { multi: true });
 
   // create a new episode
-  await db.insert({ userId, episodeName, links: [] });
+  await db.insert({ userId, collectionName, links: [] });
 
-  ctx.reply(`New episode created with name: ${episodeName}`);
+  ctx.reply(`New collection created with name: ${collectionName}`);
 });
 
 bot.hears(urlRegex(), async ctx => {
@@ -80,10 +80,10 @@ bot.hears(urlRegex(), async ctx => {
     `Ready to save: "${title}".
   What category should it be?`,
     Markup.keyboard(categories).oneTime().resize()
-    //   .extra()
   );
 });
 
+// categories handling
 categories.forEach(category => {
   bot.hears(category, async ctx => {
     const userId = ctx.from.id;
@@ -98,5 +98,19 @@ categories.forEach(category => {
   });
 });
 
+bot.hears(/generate markdown/i, async ctx => {
+  const userId = ctx.from.userId;
+
+  //   const collection = await db.find({});
+  let markdown;
+  await db.find({}, (err, doc) => {
+    markdown = JSON.stringify(doc);
+
+    console.log(markdown);
+    ctx.reply(markdown);
+  });
+
+  //   console.log(await db.find({}));
+});
 // start bot
 bot.launch();
