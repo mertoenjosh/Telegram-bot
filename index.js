@@ -18,6 +18,14 @@ const titleRegex = /<title>(.+)<\/title>/gim;
 // memory storage
 const memoryStore = {};
 
+// categories lists
+const categories = [
+  'Articles & News',
+  'Releases',
+  'Libs and Demos',
+  'Silly stuff',
+];
+
 // masic messages initializations
 const welcomeMessage = `Welcome to back up bot..!  
 Send me a link... I promise to keep it safe`;
@@ -51,7 +59,7 @@ bot.hears(urlRegex(), async ctx => {
   // get url title
   const body = await fetch(firstUrl).then(r => r.text());
   const titleTag = body.match(titleRegex);
-  console.log(titleTag);
+
   const title = ent.decode(
     titleTag.pop().replace('<title>', '').replace('</title>', '')
   );
@@ -60,6 +68,7 @@ bot.hears(urlRegex(), async ctx => {
   const userId = ctx.from.id;
   memoryStore[userId] = { url: firstUrl, title, category: '' };
 
+  // find and update current episode
   /*
   await db.update(
     { userId },
@@ -70,18 +79,23 @@ bot.hears(urlRegex(), async ctx => {
   ctx.reply(
     `Ready to save: "${title}".
   What category should it be?`,
-    Markup.keyboard(['/Articles', '/Releases', '/Lib', '/Silly'])
-      .oneTime()
-      .resize()
+    Markup.keyboard(categories).oneTime().resize()
     //   .extra()
   );
 });
 
-bot.hears('/article', async ctx => {
-  const userId = ctx.from.id;
-  //   memoryStore[userId] = { url: firstUrl, title, category: '' };
+categories.forEach(category => {
+  bot.hears(category, async ctx => {
+    const userId = ctx.from.id;
+    const linkObject = memoryStore[userId]; // { url: firstUrl, title, category: '' };
+    linkObject.category = category;
 
-  ctx.reply(`Saving link: ${memoryStore[userId].title}`);
+    // find and update current episode
+
+    await db.update({ userId }, { $push: { links: linkObject } });
+
+    ctx.reply(`Saved link into "${category}": ${memoryStore[userId].title}`);
+  });
 });
 
 // start bot
