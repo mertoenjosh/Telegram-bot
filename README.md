@@ -8,7 +8,7 @@ the bot can return a markdown preview of the Markdown generated from the links s
 
 The bot wll categorize different links in different categories.
 
-### Feauture Improvements
+### Future Improvements
 
 1. Change DB to a secure one
 
