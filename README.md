@@ -1,4 +1,4 @@
-<h1 align='center'> Links saving telegram bot </h1>
+<h1 align='center'>Telegram-bot</h1>
 
 ## Author: *Martin Thuo*
 
