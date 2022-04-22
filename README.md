@@ -1,21 +1,39 @@
-<h1 align='center'>
-Links saving telegram bot
-</h1>
+<h1 align='center'> Links saving telegram bot </h1>
 
-The bot will return a raw markdown text
+## Author: *Martin Thuo*
 
-the bot can return a markdown preview of the Markdown generated from the links sent
+## Functionality
 
-The bot wll categorize different links in different categories.
+A telegram bot that you send links and returns a raw markdown text with a preview of the Markdown generated from the links sent.
 
-### Future Improvements
+It categorize different links in different categories.
 
-1. Change DB to a secure one
+The following **extensions** are **Yet** to be Implemented:
 
-2. Auto send the links to cloud.
+- [ ] Change DB to a secure one
 
-3. Add a media backup functionality.
+- [ ] Auto send the links to cloud.
 
-4. Edit exixting episodes and not deleting the previous after creating a new one.
+- [ ] Add a media backup functionality.
 
-5. Train to auto select category
+- [ ] Edit existing episodes and not deleting the previous after creating a new one.
+
+__optional__
+- [ ] Train to auto select category
+
+
+## License
+
+    Copyright 2022 Martin Thuo
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
